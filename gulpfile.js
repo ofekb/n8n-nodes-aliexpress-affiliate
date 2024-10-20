@@ -18,5 +18,4 @@ gulp.task('build:icons', (done) => {
     done();
 });
 
-// Default task
 gulp.task('default', gulp.series('build:icons'));
