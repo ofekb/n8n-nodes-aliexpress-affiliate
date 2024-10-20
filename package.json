@@ -1,0 +1,59 @@
+{
+  "name": "n8n-nodes-aliexpress-affiliate",
+  "version": "0.1.13",
+  "description": "n8n node for AliExpress Affiliate API",
+  "keywords": [
+    "n8n-community-node-package",
+    "aliexpress",
+    "affiliate"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/ofekb/n8n-nodes-aliexpress-affiliate",
+  "author": {
+    "name": "Ofek",
+    "telegram": "@AppDev420"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ofekb/n8n-nodes-aliexpress-affiliate.git"
+  },
+  "main": "nodes/AliExpressAffiliate/AliExpressAffiliate.node.js",
+  "scripts": {
+    "build": "tsc && gulp build:icons",
+    "lint": "eslint nodes credentials --ext .ts --fix",
+    "prepublishOnly": "npm run build && npm run lint",
+    "dev": "tsc --watch",
+    "format": "prettier nodes credentials --write",
+    "lintfix": "eslint nodes credentials package.json --fix"
+  },
+  "files": [
+    "dist",
+    "nodes/AliExpressAffiliate/aliexpress.svg"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": [
+      "dist/credentials/AliExpressAffiliateApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/AliExpressAffiliate/AliExpressAffiliate.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@types/node": "^14.18.63",
+    "@types/request": "^2.48.8",
+    "@typescript-eslint/eslint-plugin": "^5.45.1",
+    "@typescript-eslint/parser": "^5.45.1",
+    "eslint": "^8.10.0",
+    "eslint-plugin-n8n-nodes-base": "^1.16.3",
+    "n8n-workflow": "^0.147.0",
+    "prettier": "^2.7.1",
+    "typescript": "^4.8.4"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "gulp": "^5.0.0",
+    "ip": "^1.1.8",
+    "path": "^0.12.7"
+  }
+}
