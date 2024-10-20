@@ -142,12 +142,27 @@ export class AliExpressAffiliate implements INodeType {
 						operation: [
 							'getFeaturedPromoProduct',
 							'getHotProductDownload',
-							'getHotProducts',
-							'getProducts',
 						],
 					},
 				},
 				description: 'Category ID, you can get category ID via "get category" API https://developers.aliexpress.com/en/doc.htm?docId=45801&docType=2',
+			},
+			{
+				displayName: 'Category IDs',
+				name: 'category_ids',
+				type: 'string',
+				default: '',
+				required: false,
+				displayOptions: {
+					show: {
+						operation: [
+
+							'getHotProducts',
+							'getProducts'
+						],
+					},
+				},
+				description: 'List of category ID, you can get category ID ("111,222,333") via "get category" API https://developers.aliexpress.com/en/doc.htm?docId=45801&docType=2',
 			},
 			{
 				displayName: 'Fields',
@@ -163,6 +178,7 @@ export class AliExpressAffiliate implements INodeType {
 							'getHotProducts',
 							'getProducts',
 							'getOrderInfo',
+							'getProductDetailInfo'
 						],
 					},
 				},
@@ -621,7 +637,7 @@ export class AliExpressAffiliate implements INodeType {
 
 	private static getAliExpressMethod(operation: string): string {
 		const methodMap: { [key: string]: string } = {
-			searchProducts: 'aliexpress.affiliate.product.query',
+			getProducts: 'aliexpress.affiliate.product.query',
 			getHotProducts: 'aliexpress.affiliate.hotproduct.query',
 			getProductDetails: 'aliexpress.affiliate.productdetail.get',
 			generateAffiliateLink: 'aliexpress.affiliate.link.generate',
@@ -640,35 +656,47 @@ export class AliExpressAffiliate implements INodeType {
 	
 	private static async addParametersToRequest(executeFunctions: IExecuteFunctions, request: IopRequest, operation: string, itemIndex: number): Promise<void> {
 		switch (operation) {
-			case 'searchProducts':
+			case 'getProducts':
 				request.add_api_param('keywords', executeFunctions.getNodeParameter('keywords', itemIndex) as string);
 				request.add_api_param('category_ids', executeFunctions.getNodeParameter('category_ids', itemIndex) as string);
 				request.add_api_param('min_sale_price', executeFunctions.getNodeParameter('min_sale_price', itemIndex) as number);
 				request.add_api_param('max_sale_price', executeFunctions.getNodeParameter('max_sale_price', itemIndex) as number);
+				request.add_api_param('fields', executeFunctions.getNodeParameter('fields', itemIndex) as string);
+				request.add_api_param('page_no', executeFunctions.getNodeParameter('page_no', itemIndex) as string);
+				request.add_api_param('page_size', executeFunctions.getNodeParameter('page_size', itemIndex) as string);
+				request.add_api_param('platform_product_type', executeFunctions.getNodeParameter('platform_product_type', itemIndex) as string);
+				request.add_api_param('sort', executeFunctions.getNodeParameter('sort', itemIndex) as string);
+				request.add_api_param('target_currency', executeFunctions.getNodeParameter('target_currency', itemIndex) as string);
+				request.add_api_param('target_language', executeFunctions.getNodeParameter('target_language', itemIndex) as string);
+				request.add_api_param('ship_to_country', executeFunctions.getNodeParameter('ship_to_country', itemIndex) as string);
+				request.add_api_param('delivery_days', executeFunctions.getNodeParameter('delivery_days', itemIndex) as string);
 				break;
-			case 'getProductDetails':
+			case 'getProductDetailInfo':
 				request.add_api_param('product_ids', executeFunctions.getNodeParameter('product_ids', itemIndex) as string);
+				request.add_api_param('target_currency', executeFunctions.getNodeParameter('target_currency', itemIndex) as string);
+				request.add_api_param('target_language', executeFunctions.getNodeParameter('target_language', itemIndex) as string);
+				request.add_api_param('fields', executeFunctions.getNodeParameter('fields', itemIndex) as string);
 				break;
 			case 'generateAffiliateLink':
 				request.add_api_param('promotion_link_type', executeFunctions.getNodeParameter('promotion_link_type', itemIndex));
 				request.add_api_param('source_values', executeFunctions.getNodeParameter('source_values', itemIndex) as string);
-				
-				// Handle tracking_id either from parameters or credentials
-				let trackingId = executeFunctions.getNodeParameter('trackingId', itemIndex, '') as string;
-				if (!trackingId) {
-					const credentials = await executeFunctions.getCredentials('aliExpressAffiliateApi');
-					trackingId = credentials.trackingId as string;  // Ensure that the trackingId exists in credentials
-				}
-				request.add_api_param('tracking_id', trackingId);
 				break;
 			case 'getHotProducts':
 				request.add_api_param('category_ids', executeFunctions.getNodeParameter('category_ids', itemIndex) as string);
 				request.add_api_param('keywords', executeFunctions.getNodeParameter('keywords', itemIndex) as string);
 				request.add_api_param('min_sale_price', executeFunctions.getNodeParameter('min_sale_price', itemIndex) as number);
 				request.add_api_param('max_sale_price', executeFunctions.getNodeParameter('max_sale_price', itemIndex) as number);
+				request.add_api_param('fields', executeFunctions.getNodeParameter('fields', itemIndex) as string);
+				request.add_api_param('page_no', executeFunctions.getNodeParameter('page_no', itemIndex) as string);
+				request.add_api_param('page_size', executeFunctions.getNodeParameter('page_size', itemIndex) as string);
+				request.add_api_param('platform_product_type', executeFunctions.getNodeParameter('platform_product_type', itemIndex) as string);
+				request.add_api_param('sort', executeFunctions.getNodeParameter('sort', itemIndex) as string);
+				request.add_api_param('target_currency', executeFunctions.getNodeParameter('target_currency', itemIndex) as string);
+				request.add_api_param('target_language', executeFunctions.getNodeParameter('target_language', itemIndex) as string);
+				request.add_api_param('ship_to_country', executeFunctions.getNodeParameter('ship_to_country', itemIndex) as string);
+				request.add_api_param('delivery_days', executeFunctions.getNodeParameter('delivery_days', itemIndex) as string);
 				break;
 			case 'getOrders':
-			case 'getReport':
 			case 'getOrderList':
 			case 'getOrderListByIndex':
 				request.add_api_param('start_time', executeFunctions.getNodeParameter('start_time', itemIndex) as string);
@@ -688,7 +716,13 @@ export class AliExpressAffiliate implements INodeType {
 				request.add_api_param('order_ids', executeFunctions.getNodeParameter('order_ids', itemIndex) as string);
 				break;
 		}
-	
+		// Handle tracking_id either from parameters or credentials
+		let trackingId = executeFunctions.getNodeParameter('trackingId', itemIndex, '') as string;
+		if (trackingId != "") {
+			const credentials = await executeFunctions.getCredentials('aliExpressAffiliateApi');
+			trackingId = credentials.trackingId as string;  // Ensure that the trackingId exists in credentials
+		}
+		request.add_api_param('tracking_id', trackingId);
 		// // Handle additional fields
 		// const additionalFields = executeFunctions.getNodeParameter('additionalFields', itemIndex) as IDataObject;
 		// for (const [key, value] of Object.entries(additionalFields)) {
