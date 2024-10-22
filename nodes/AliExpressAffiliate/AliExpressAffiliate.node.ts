@@ -11,7 +11,7 @@ export class AliExpressAffiliate implements INodeType {
     description: INodeTypeDescription = {
         displayName: 'AliExpress Affiliate',
         name: 'aliExpressAffiliate',
-        icon: 'file:icons/aliexpress.svg',
+        icon: 'file:aliexpress.svg',
         group: ['transform'],
         version: 1,
         subtitle: '={{$parameter["operation"]}}',

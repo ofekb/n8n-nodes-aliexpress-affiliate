@@ -27,8 +27,7 @@
     "lintfix": "eslint nodes credentials package.json --fix"
   },
   "files": [
-    "dist",
-    "nodes/AliExpressAffiliate/aliexpress.svg"
+    "dist"
   ],
   "n8n": {
     "n8nNodesApiVersion": 1,

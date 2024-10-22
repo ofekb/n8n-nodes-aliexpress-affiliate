@@ -1,22 +1,16 @@
-const gulp = require('gulp');
-const fs = require('fs');
 const path = require('path');
+const { task, src, dest } = require('gulp');
 
-// Define the path for the icons
-const ICONS_SRC = 'nodes/AliExpressAffiliate/*.svg';
-const ICONS_DEST = 'dist/icons';
+task('build:icons', copyIcons);
 
-// Task to copy the SVG files
-gulp.task('build:icons', (done) => {
-    if (!fs.existsSync(ICONS_DEST)) {
-        fs.mkdirSync(ICONS_DEST, { recursive: true });
-    }
+function copyIcons() {
+	const nodeSource = path.resolve('nodes', '**', '*.{png,svg}');
+	const nodeDestination = path.resolve('dist', 'nodes');
 
-    gulp.src(ICONS_SRC)
-        .pipe(gulp.dest(ICONS_DEST));
+	src(nodeSource).pipe(dest(nodeDestination));
 
-    done();
-});
+	const credSource = path.resolve('credentials', '**', '*.{png,svg}');
+	const credDestination = path.resolve('dist', 'credentials');
 
-gulp.task('default', gulp.series('build:icons'));
-
+	return src(credSource).pipe(dest(credDestination));
+}
