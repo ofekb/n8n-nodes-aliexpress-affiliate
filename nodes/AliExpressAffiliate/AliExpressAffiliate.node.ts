@@ -639,7 +639,7 @@ export class AliExpressAffiliate implements INodeType {
 		const methodMap: { [key: string]: string } = {
 			getProducts: 'aliexpress.affiliate.product.query',
 			getHotProducts: 'aliexpress.affiliate.hotproduct.query',
-			getProductDetails: 'aliexpress.affiliate.productdetail.get',
+			getProductDetailInfo: 'aliexpress.affiliate.productdetail.get',
 			generateAffiliateLink: 'aliexpress.affiliate.link.generate',
 			getCategories: 'aliexpress.affiliate.category.get',
 			getOrders: 'aliexpress.affiliate.order.list',
